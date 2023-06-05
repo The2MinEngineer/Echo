@@ -55,7 +55,26 @@ export default async function handler(
       } catch (error) {
         console.log(error);
       }
-      // NOTIFICATION PART END
+
+      try {
+        await prisma.notification.create({
+          data: {
+            body: 'Someone followed you!',
+            userId,
+          },
+        });
+
+        await prisma.user.update({
+          where: {
+            id: userId,
+          },
+          data: {
+            hasNotification: true,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     if (req.method === 'DELETE') {
