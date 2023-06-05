@@ -22,7 +22,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const loginModal = useLoginModal();
 
   const { data: currentUser } = useCurrentUser();
-  const { mutate: mutatePosts } = usePosts();
+  const { mutate: mutatePosts } = usePosts(postId as string);
   const { mutate: mutatePost } = usePost(postId as string);
 
   const [body, setBody] = useState('');
@@ -35,7 +35,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
       const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts';
 
       await axios.post(url, { body });
-
+ 
       toast.success('Tweet created');
       setBody('');
       mutatePosts();
