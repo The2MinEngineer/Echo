@@ -19,8 +19,8 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-        disabled={disabled}
-        onClick={onClick}
+      disabled={disabled}
+      onClick={onClick}
       className={`
         disabled:opacity-70
         disabled:cursor-not-allowed
@@ -32,7 +32,7 @@ const Button: React.FC<ButtonProps> = ({
         ${fullWidth ? 'w-full' : 'w-fit'}
         ${secondary ? 'bg-white' : 'bg-orange-500'}
         ${secondary ? 'text-black' : 'text-white'}
-        ${secondary ? 'border-black' : 'border-pink-500'}
+        ${secondary ? 'border-black' : 'border-none'}
         ${large ? 'text-xl' : 'text-md'}
         ${large ? 'px-5' : 'px-4'}
         ${large ? 'py-3' : 'py-2'}
