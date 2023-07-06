@@ -24,7 +24,7 @@ const SidebarTweetButton = () => {
       flex
       items-center
       justify-center
-      bg-orange-500
+      bg-blue-500
       hover:bg-opacity-80
       transition
       cursor-pointer
@@ -40,7 +40,7 @@ const SidebarTweetButton = () => {
       px-4
       py-2
       rounded-full
-      bg-orange-500
+      bg-blue-500
       hover:bg-opacity-90
       transition
       cursor-pointer
