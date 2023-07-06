@@ -1,38 +1,39 @@
-// PostView component
-import Form from "@/components/Form"
-import Header from "@/components/Header"
-import CommentFeed from "@/components/posts/CommentFeed"
-import PostItem from "@/components/posts/PostItem"
-import usePost from "@/hooks/usePost"
-import { useRouter } from "next/router"
-import { ClipLoader } from "react-spinners"
+import { NextApiRequest, NextApiResponse } from "next";
 
-const PostView = () => {
-  const router = useRouter()
-  const { postId } = router.query
-    
-  const { data: fetchedPost, isLoading } = usePost(postId as string)
+import prisma from "@/libs/prismadb";
 
-  if (isLoading || !fetchedPost) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <ClipLoader color="light-orange" size={80} />
-      </div>
-    )
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'GET') {
+    return res.status(405).end();
   }
 
-  return (
-    <>
-      <Header label="Echo" showBackArrow />
-      <PostItem data={fetchedPost} userId={fetchedPost.userId} />
-      <Form
-        postId={postId as string}
-        isComment
-        placeholder="Echo your reply"
-      />
-      <CommentFeed comments={fetchedPost.comments} />
-    </>
-  )
-}
+  try {
+    const { postId } = req.query;
 
-export default PostView
+    if (!postId || typeof postId !== 'string') {
+      throw new Error('Invalid ID');
+    }
+
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+      include: {
+        user: true,
+        comments: {
+          include: {
+            user: true
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        },
+      },
+    });
+
+    return res.status(200).json(post);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).end();
+  }
+}
